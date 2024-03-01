@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const Cakes = require('../models/cake');
+var authenticate = require('../authenticate');
+
 const cakeRouter = express.Router();
 
 cakeRouter.use(bodyParser.json());
@@ -17,7 +19,7 @@ cakeRouter.route('/')
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         Cakes.create(req.body)
             .then((cake) => {
                 console.log('Cake Created', cake);
@@ -27,11 +29,11 @@ cakeRouter.route('/')
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .put((req, res, next) => {
+    .put(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
         res.end('Put operation not supported on /cakes');
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Cakes.deleteMany({})
             .then((resp) => {
                 res.statusCode = 200;
@@ -52,11 +54,11 @@ cakeRouter.route('/:cakeId')
             .catch((err) => next(err));
             
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
         res.end('Post operation not supported on /cakes/' + req.params.cakeId);
     })
-    .put((req, res, next) => {
+    .put(authenticate.verifyUser, (req, res, next) => {
         Cakes.findByIdAndUpdate(req.params.cakeId, {
             $set: req.body
         }, {new: true})
@@ -67,7 +69,7 @@ cakeRouter.route('/:cakeId')
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Cakes.findByIdAndDelete(req.params.cakeId)
             .then((resp) => {
                 res.statusCode = 200;
@@ -94,7 +96,7 @@ cakeRouter.route('/:cakeId/toppings')
         }, (err) => next(err))
         .catch((err) => next(err));
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         Cakes.findById(req.params.cakeId)
             .then((cake) => {
                 if(cake != null){
@@ -114,11 +116,11 @@ cakeRouter.route('/:cakeId/toppings')
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .put((req, res, next) => {
+    .put(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
         res.end('Put operation not supported on /cakes/' + req.params.cakeId + '/toppings');
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Cakes.findById(req.params.cakeId)
             .then((cake) => {
                 if(cake != null){
@@ -164,11 +166,11 @@ cakeRouter.route('/:cakeId/toppings')
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
         res.end('Post operation not supported on /cakes/' + req.params.cakeId + '/toppings/' + req.params.toppingId);
     })
-    .put((req, res, next) => {
+    .put(authenticate.verifyUser, (req, res, next) => {
         Cakes.findById(req.params.cakeId)
             .then((cake) => {
                 if(cake != null && cake.topping.id(req.params.toppingId) != null){
@@ -199,7 +201,7 @@ cakeRouter.route('/:cakeId/toppings')
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Cakes.findById(req.params.cakeId)
             .then((cake) => {
                 if(cake != null && cake.topping.id(req.params.toppingId) != null){
