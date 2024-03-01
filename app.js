@@ -8,9 +8,9 @@ var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 var passport = require('passport');
 var authenticate = require('./authenticate');
+var config = require('./config');
 
-
-const url = "mongodb://127.0.0.1:27017/conFusion";
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 connect.then((db) => { console.log('Connected correctly to server'); }, (err) => { console.log(err);});
 
