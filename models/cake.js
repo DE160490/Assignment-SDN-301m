@@ -13,6 +13,10 @@ var toppingSchema = new Schema({
         type: Currency,
         required: true
     },
+    order_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 var cakeSchema = new Schema({
