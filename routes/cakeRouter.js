@@ -12,7 +12,6 @@ cakeRouter.use(bodyParser.json());
 cakeRouter.route('/')
     .get((req, res, next) => {
         Cakes.find({})
-            .populate('topping.order_by')
             .then((cakes) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
