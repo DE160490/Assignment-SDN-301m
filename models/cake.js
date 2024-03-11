@@ -12,10 +12,6 @@ var toppingSchema = new Schema({
     price_extra: {
         type: Currency,
         required: true
-    },
-    order_by: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
     }
 });
 
